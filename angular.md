@@ -2,6 +2,7 @@
 
 ---
 
+... (previous content unchanged)
 
 ---
 
@@ -134,3 +135,87 @@ services:
 ```
 
 ---
+
+### **24. Kubernetes Manifests**
+
+#### 🗂️ `deployment-backend.yaml`
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springboot-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: your-registry/springboot-app:latest
+        ports:
+        - containerPort: 8080
+```
+
+#### 🗂️ `service-backend.yaml`
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: backend
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+  type: ClusterIP
+```
+
+#### 🗂️ `deployment-frontend.yaml`
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: angular-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: your-registry/angular-app:latest
+        ports:
+        - containerPort: 80
+```
+
+#### 🗂️ `service-frontend.yaml`
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  selector:
+    app: frontend
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: LoadBalancer
+```
